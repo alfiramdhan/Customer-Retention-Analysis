@@ -1,10 +1,11 @@
-/*
+### In the initial cohort analysis, we need to determine what data are needed for the analysis.
 - Agg value : count(distinct user_id)
 - Unique identifier : user_id
 - Initial start date : first_post_date
 - Period : month
-*/
 
+
+````sql
 WITH user_activity AS(
   SELECT
         DISTINCT buyer_id,
@@ -35,34 +36,4 @@ retention_table AS(
         number_user / cohort_size as retention_rate
   FROM retention_table  
   order by 1,2;
-
---  Retention rate in 2022
-WITH cohort AS (
-  SELECT
-    buyer_id,
-    MIN(transaction_date) AS cohort_date
-  FROM
-    ferrous-acronym-390114.padi_umkm.transaction    
-  WHERE
-    EXTRACT(YEAR FROM transaction_date) = 2022
-  GROUP BY
-    buyer_id
-),
-
-retention AS (
-  SELECT
-    COUNT(DISTINCT t.buyer_id) AS cohort_size,
-    COUNT(DISTINCT r.buyer_id) AS retained_users
-  FROM
-    ferrous-acronym-390114.padi_umkm.transaction AS t
-  JOIN
-    cohort AS r ON t.buyer_id = r.buyer_id
-  WHERE
-    EXTRACT(YEAR FROM t.transaction_date) = 2022
-    AND t.transaction_date > r.cohort_date
-)
-
-SELECT
-  retained_users / cohort_size AS retention_rate
-FROM
-  retention;
+````
