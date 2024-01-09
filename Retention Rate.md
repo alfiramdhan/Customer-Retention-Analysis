@@ -1,3 +1,5 @@
+## Retention Rate: Persentase pelanggan yang tetap menggunakan produk atau layanan Anda dalam periode waktu tertentu.
+
 ### In the initial cohort analysis, we need to determine what data are needed for the analysis.
 - Agg value : count(distinct user_id)
 - Unique identifier : user_id
