@@ -1,3 +1,5 @@
+## Churn Rate: Persentase pelanggan yang berhenti menggunakan produk atau layanan Anda dalam periode waktu tertentu.
+
 ### In the initial cohort analysis, we need to determine what data are needed for the analysis.
 - Agg value : count(distinct buyer_id)
 - Unique identifier : buyer_id
