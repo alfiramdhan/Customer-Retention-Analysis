@@ -15,6 +15,9 @@ The dataset that is used for this presentation has been cleaned, so the process 
 - Python
 - Spreadsheet
 
+# Cohort Analysis in Spreadsheet :
+<a href="https://docs.google.com/spreadsheets/d/14Gfx_vOMiAr9vi29pvNJDZKJnKhnqMblBMuNqPbfV1s/edit?usp=sharing"> Customer Retention</a>
+
 ## Situation
 
 ## Background
