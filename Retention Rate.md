@@ -13,7 +13,7 @@ WITH user_activity AS(
         DISTINCT buyer_id,
         MIN(DATE_TRUNC(DATE(transaction_date),MONTH)) OVER(PARTITION BY buyer_id) as first_txn_date,
         DATE_TRUNC(DATE(transaction_date),MONTH) as running_txn_date
-  FROM ferrous-acronym-390114.padi_umkm.transaction     
+  FROM ferrous-acronym-390114.Transaction_PaDi.transaction_join    
 ),
 cohort_sizes AS(
   SELECT *,
@@ -35,7 +35,7 @@ retention_table AS(
   SELECT
         first_txn_date,
         diff_month,
-        number_user / cohort_size as retention_rate
+        (number_user / cohort_size)*100 as retention_rate
   FROM retention_table  
   order by 1,2;
 ````
