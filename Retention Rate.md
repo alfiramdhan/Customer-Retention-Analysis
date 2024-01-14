@@ -39,3 +39,35 @@ retention_table AS(
   FROM retention_table  
   order by 1,2;
 ````
+
+----
+
+### Monthly Retention Rate
+ ```sql
+ WITH monthly_purchases AS (
+  SELECT buyer_id,
+         EXTRACT(MONTH FROM transaction_date) AS month,
+         COUNT(DISTINCT transaction_date) AS purchase_count
+  FROM ferrous-acronym-390114.Transaction_PaDi.transaction_join
+  GROUP BY buyer_id, month
+),
+
+retained_customers AS (
+  SELECT a.buyer_id, a.month
+  FROM monthly_purchases a
+  JOIN monthly_purchases b ON a.buyer_id = b.buyer_id
+                           AND a.month = b.month - 1
+  WHERE a.purchase_count > 0
+)
+
+SELECT a.month,
+       COUNT(DISTINCT a.buyer_id) AS retained_customers,
+       COUNT(DISTINCT b.buyer_id) AS total_customers,
+       COUNT(DISTINCT a.buyer_id) / COUNT(DISTINCT b.buyer_id) AS retention_rate
+FROM retained_customers a
+JOIN monthly_purchases b ON a.month = b.month
+GROUP BY a.month
+ORDER BY a.month ASC;
+```
+
+
