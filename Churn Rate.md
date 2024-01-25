@@ -5,24 +5,11 @@ WITH monthly_purchases AS (
   SELECT
     buyer_id,
     DATE_TRUNC(DATE(transaction_date), MONTH) AS month,
-    COUNT(DISTINCT transaction_date) AS purchase_count
+    COUNT(DISTINCT order_id)as number_order
   FROM
     ferrous-acronym-390114.Transaction_PaDi.transaction_join
   GROUP BY
     buyer_id, month
-),
-
-retained_customers AS (
-  SELECT
-    a.buyer_id,
-    a.month
-  FROM
-    monthly_purchases a
-  JOIN
-    monthly_purchases b ON a.buyer_id = b.buyer_id
-                          AND DATE_TRUNC(DATE_ADD(b.month, INTERVAL 1 MONTH), MONTH) = a.month
-  WHERE
-    a.purchase_count > 0
 ),
 
 churned_customers AS (
@@ -39,19 +26,16 @@ churned_customers AS (
 )
 
 SELECT
-  a.month,
-  COUNT(DISTINCT a.buyer_id) AS retained_customers,
+  c.month,
   COUNT(DISTINCT b.buyer_id) AS churned_customers,
   COUNT(DISTINCT c.buyer_id) AS total_customers,
   (COUNT(DISTINCT b.buyer_id) / COUNT(DISTINCT c.buyer_id)) * 100 AS churn_rate
 FROM
-  retained_customers a
-LEFT JOIN
-  churned_customers b ON a.month = b.month
+  churned_customers b
 JOIN
-  monthly_purchases c ON a.month = c.month
+  monthly_purchases c ON b.month = c.month
 GROUP BY
-  a.month
+  c.month
 ORDER BY
-  a.month ASC;
+  c.month ASC;
 ```
