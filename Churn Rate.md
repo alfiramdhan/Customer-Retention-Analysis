@@ -1,61 +1,57 @@
 ## Churn Rate: Persentase pelanggan yang berhenti menggunakan produk atau layanan Anda dalam periode waktu tertentu.
 
-### In the initial cohort analysis, we need to determine what data are needed for the analysis.
-- Agg value : count(distinct buyer_id)
-- Unique identifier : buyer_id
-- Initial start date : first_post_date
-- Period : month
-
 ```sql
-WITH user_activity AS (
+WITH monthly_purchases AS (
   SELECT
-    DISTINCT buyer_id,
-    MIN(DATE_TRUNC(DATE(transaction_date), MONTH)) OVER (PARTITION BY buyer_id) AS first_txn_date,
-    DATE_TRUNC(DATE(transaction_date), MONTH) AS running_txn_date
+    buyer_id,
+    DATE_TRUNC(DATE(transaction_date), MONTH) AS month,
+    COUNT(DISTINCT transaction_date) AS purchase_count
   FROM
-    ferrous-acronym-390114.padi_umkm.transaction
-),
-cohort_sizes AS (
-  SELECT
-    *,
-    DATE_DIFF(running_txn_date, first_txn_date, month) AS diff_month,
-    COUNT(DISTINCT buyer_id) OVER (PARTITION BY first_txn_date) AS cohort_size
-  FROM
-    user_activity
-),
-retention_table AS (
-  SELECT
-    first_txn_date,
-    diff_month,
-    cohort_size,
-    COUNT(DISTINCT buyer_id) AS number_user
-  FROM
-    cohort_sizes
-  WHERE
-    first_txn_date >= '2020-01-01'
+    ferrous-acronym-390114.Transaction_PaDi.transaction_join
   GROUP BY
-    1, 2, 3
-  ORDER BY
-    1, 2
+    buyer_id, month
 ),
-churn_table AS (
+
+retained_customers AS (
   SELECT
-    rt.first_txn_date,
-    rt.diff_month,
-    rt.cohort_size,
-    rt.number_user,
-    LAG(rt.number_user) OVER (PARTITION BY rt.first_txn_date ORDER BY rt.diff_month) AS previous_user
+    a.buyer_id,
+    a.month
   FROM
-    retention_table AS rt
+    monthly_purchases a
+  JOIN
+    monthly_purchases b ON a.buyer_id = b.buyer_id
+                          AND DATE_TRUNC(DATE_ADD(b.month, INTERVAL 1 MONTH), MONTH) = a.month
+  WHERE
+    a.purchase_count > 0
+),
+
+churned_customers AS (
+  SELECT
+    a.buyer_id,
+    a.month
+  FROM
+    monthly_purchases a
+  LEFT JOIN
+    monthly_purchases b ON a.buyer_id = b.buyer_id
+                          AND DATE_TRUNC(DATE_ADD(b.month, INTERVAL 1 MONTH), MONTH) = a.month
+  WHERE
+    b.buyer_id IS NULL
 )
+
 SELECT
-  ct.first_txn_date,
-  ct.diff_month,
-  (ct.previous_user - ct.number_user) / ct.cohort_size AS churn_rate
+  a.month,
+  COUNT(DISTINCT a.buyer_id) AS retained_customers,
+  COUNT(DISTINCT b.buyer_id) AS churned_customers,
+  COUNT(DISTINCT c.buyer_id) AS total_customers,
+  (COUNT(DISTINCT b.buyer_id) / COUNT(DISTINCT c.buyer_id)) * 100 AS churn_rate
 FROM
-  churn_table AS ct
-WHERE
-  ct.previous_user IS NOT NULL
+  retained_customers a
+LEFT JOIN
+  churned_customers b ON a.month = b.month
+JOIN
+  monthly_purchases c ON a.month = c.month
+GROUP BY
+  a.month
 ORDER BY
-  1, 2;
+  a.month ASC;
 ```
