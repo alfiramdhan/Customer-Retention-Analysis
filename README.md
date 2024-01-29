@@ -12,35 +12,36 @@ The dataset that is used for this presentation has been cleaned, so the process 
 
 # Tools :
 - SQL
-- Python
-- Spreadsheet
-
-# Cohort Analysis in Spreadsheet :
-<a href="https://docs.google.com/spreadsheets/d/14Gfx_vOMiAr9vi29pvNJDZKJnKhnqMblBMuNqPbfV1s/edit?usp=sharing"> Customer Retention</a>
+- Tableau
 
 ## Situation
 
 ## Background
-The experts work hard to attract through a mix of marketing, social media and sales strategies. They want to know about the customer retention. Using the following key metrics: ARPU, customer retention rate, cohort analysis, and CLV of separate categories, experts want to know the trends and patterns to improve customer retention
+PaDi (Digital Market) UMKM is a marketplace initiated by the Ministry of BUMN, Ministry of UMKM, and LKPP (Government Goods/Services Procurement Policy Institute). **This marketplace provides** access for Indonesian MSMEs to government **procurement of goods and services**, especially by BUMN.
+
+In the e-commerce industry, maintaining customer loyalty is the most important thing. As a data analyst, we need to find insights into customer behavior. Customer behavior is divided into metrics such as retention rate and churn rate. So this project aims to identify trends and patterns that will form the basis for developing strategies **to increase customer retention and reduce churn**.
 
 ## Objective
 The aim of this project :
-- To identify ways to reduce churn and prevent from switching to competitors
-- To analyze data related to customer behavior, purchase performances to identify trends and patterns to improve customer retention
-- Recommendations for the development of the marketing strategy that can improve business
+- To identify ways to reduce churn and prevent from switching to competitors.
+- To analyze data related to customer behavior, purchase performances to identify trends and patterns to improve customer retention.
 
 ## Task & Actions
 - Extract dataset using Google BigQuery
-  
-- Import dataset into Google Colab ->	Use Python libraries including pandas and numpy ->	To load dataset and perform data cleaning
-
-- Identify dataset -> Use Python libraries including pandas, numpy, seaborn and matplotlib to analyze and visualize data	-> To analyze trends and pattern in promo performance in the last 6 months
-
-- Calculate CLV	-> To find user value group based on their CLV
+- Data manipulation → Join the data tables that address the problem
+- Identify dataset -> Use Tableau to analyze trend line and visualize data -> To analyze monthly trends and patterns of retention, churn rate, ARPU and CLV in the last year 2022
+- Create cohort analysis-> To identify how group (customer retention and ARPU) months behave differently → To calculate and measure the retention rate over time
 
 ## Result
-The result of this project, 
+The result of this project :
+1. Based on the Pareto Principle, it is known that 80% of revenue comes from 20% of the main category products.
+2. The average churn rate was 44.29%. There was a significant increase in March and June by 52.31% and 51.41%.
+3. The average retention rate was 55.71%. With the lowest point occurring in March and June. This may be related to increased churn rates in the same month.
+4. For buyers who completed product purchases in Q1, retention numbers decreased significantly in May, on average by -17%. Then it began to increase from June to December. This may be caused by the moments before Ramadan and Eid al-Fitr in May. Because the company provides procurement of goods and services that are not related to needs ahead of Ramadan and Eid al-Fitr. al-Fitr.
+5. There was a decline in ARPU of -19.3% in May (Q1 to Q2). This may indicate seasonal influences or events that influence customer shopping behavior.
+6. If detailed, overall revenue based on the top main product categories tends to decline in Q2, especially in April and May, ahead of Ramadan and Idul Fitri.
+7. CLV trends tend to increase over time. However, this was followed by a significant decline in March, June and October.
 
 
 # Deck
-<a href="https://docs.google.com/presentation/d/1EJSMM6w-23lWavysn2fNFkBJcabYKr1HMcNoVm8Cv0g/edit?usp=sharing"> Customer Retention Analysis</a>
+<a href="https://drive.google.com/file/d/1wA0JHRWw-vxS7pk-pXjGzh0-bDzqa3ya/view?usp=share_link"> Customer Retention Analysis</a>
